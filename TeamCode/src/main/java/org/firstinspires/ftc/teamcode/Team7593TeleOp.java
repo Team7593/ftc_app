@@ -21,11 +21,11 @@ public class Team7593TeleOp extends Team7593OpMode {
     public int currEncoderVal;  //encoder values for tilt motor
     public int oldEncoderVal;
 
-    public int cEncoderVal;  //encoder values for ext motor
+    public int cEncoderVal;  //encoder values for lift motor right
     public int oEncoderVal;
 
-    public int goldVal;
-    public int silverVal;
+    public int cuEncoderVal; //encoder values for left motor left
+    public int olEncoderVal;
 
     Orientation angles; //to use the imu (mostly for telemetry)
 
@@ -43,7 +43,13 @@ public class Team7593TeleOp extends Team7593OpMode {
         super.init();
 
         //stop the motor(s) and reset the motor encoders to 0
+        robot.tilt.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.leftLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        robot.rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        robot.tilt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.leftLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.rightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         telemetry.addData("Say", "HELLO FROM THE OTHER SIIIIIDE");
         time.startTime();
@@ -55,31 +61,31 @@ public class Team7593TeleOp extends Team7593OpMode {
         super.loop();
 
         //get the current encoder value of tilt
+        cuEncoderVal = robot.leftLift.getCurrentPosition();
+        cEncoderVal = robot.rightLift.getCurrentPosition();
+        currEncoderVal = robot.tilt.getCurrentPosition();
 
-        double leftX, rightX, leftY, hangStick, tiltStick, tiltPower, slowTilt; //declaration for the game sticks + power
-        boolean spinIn, spinOut, slowDrive, goldExt, silverExt; //declaration for the buttons/bumpers
+        double leftX, rightX, leftY, liftStick, tiltStick, tiltPower; //declaration for the game sticks + power
+        boolean hook, latch, slowDrive, slowTilt, slowDrive2; //declaration for the buttons/bumpers
         WheelSpeeds speeds; //variable to hold speeds
 
         leftX = gamepad1.left_stick_x;
         rightX = gamepad1.right_stick_x;
         leftY = gamepad1.left_stick_y;
         slowDrive = gamepad1.left_bumper;
+        slowDrive2 = gamepad1.right_bumper;
 
-        hangStick = gamepad2.left_stick_y;
+        liftStick = gamepad2.left_stick_y;
         tiltStick = gamepad2.right_stick_y;
-        slowTilt = gamepad2.right_trigger;
-        goldExt = gamepad2.y; //2000
-        silverExt = gamepad2.x; //1500
-        spinOut = gamepad2.right_bumper;
-        spinIn = gamepad2.left_bumper;
-        tiltPower = .6;
+        slowTilt = gamepad2.right_bumper;
+        latch = gamepad2.a;
+        hook = gamepad2.x;
 
-        goldVal = 2500 - cEncoderVal;
-        silverVal = 2000 - cEncoderVal;
+        tiltPower = .6;
 
 
         //get the speeds
-        if(slowDrive){
+        if(slowDrive || slowDrive2){
             speeds = WheelSpeeds.mecanumDrive(leftX, leftY, rightX, true);
         }else{
             speeds = WheelSpeeds.mecanumDrive(leftX, leftY, rightX, false);
@@ -88,18 +94,22 @@ public class Team7593TeleOp extends Team7593OpMode {
         //power the motors
         robot.powerTheWheels(speeds);
 
-        //power the hang motor
-
 
         //slow the tilt motor
-        if(slowTilt > 0){
-            tiltPower = tiltPower/4.5;
+        if(slowTilt){
+            tiltPower = tiltPower/2;
         }
 
-
-
-
-        //code to spin the small motor
+        if(liftStick > 0) {
+            robot.rightLift.setPower(liftStick);
+            robot.leftLift.setPower(liftStick);
+        }else if(liftStick < 0) {
+            robot.rightLift.setPower(liftStick);
+            robot.leftLift.setPower(liftStick);
+        }else{
+            robot.rightLift.setPower(0);
+            robot.leftLift.setPower(0);
+        }
 
 
 

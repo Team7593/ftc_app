@@ -25,9 +25,14 @@ public class Team7593Hardware {
     public DcMotor motorFrontLeft;
     public DcMotor motorRearRight;
     public DcMotor motorRearLeft;
+    public DcMotor rightLift;
+    public DcMotor leftLift;
+    public DcMotor tilt;
 
 
     //declare servos
+    public Servo latch;
+    public Servo hook;
 
 
     //declare sensors
@@ -66,9 +71,13 @@ public class Team7593Hardware {
         motorFrontLeft = hwMap.get(DcMotor.class, "mfl");
         motorRearRight = hwMap.get(DcMotor.class, "mrr");
         motorRearLeft = hwMap.get(DcMotor.class, "mrl");
+        rightLift = hwMap.get(DcMotor.class, "rlift");
+        leftLift = hwMap.get(DcMotor.class, "llift");
+        tilt = hwMap.get(DcMotor.class, "tilt");
 
         //Define and initialize servos
-
+        latch = hwMap.get(Servo.class, "latch");
+        hook = hwMap.get(Servo.class, "hook");
 
         //Define and initialize sensors
 
@@ -83,6 +92,9 @@ public class Team7593Hardware {
         motorFrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorRearRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorRearLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        rightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        leftLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        tilt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     //powers the wheels
