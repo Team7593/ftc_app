@@ -34,6 +34,15 @@ public class Team7593Hardware {
     public Servo latch;
     public Servo hook;
 
+    //the way i made the code work is there's range that the servo can move
+    //when a driver presses the dpad up or down the servo moves back or forth in this range
+    //change the range HERE ONLY that's all you'll need if the range is off
+    public final static double HOME = 0.0; //starting position for servo tilt
+    //                                       ^change this value
+    public final static double MIN = 0.0; //min value for servo tilt
+    //                                      ^change this value
+    public final static double MAX = 1; //max value for servo tilt
+    //                                     ^change this value
 
     //declare sensors
 

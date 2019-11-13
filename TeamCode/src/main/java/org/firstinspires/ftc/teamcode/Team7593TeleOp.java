@@ -18,14 +18,20 @@ public class Team7593TeleOp extends Team7593OpMode {
     //Declare Variables
     public ElapsedTime time = new ElapsedTime(); //a timer
 
-    public int currEncoderVal;  //encoder values for tilt motor
+    public int currEncoderVal;  //encoder values for tilt
     public int oldEncoderVal;
 
-    public int cEncoderVal;  //encoder values for lift motor right
+    public int cEncoderVal;  //encoder values for rightLift
     public int oEncoderVal;
 
-    public int cuEncoderVal; //encoder values for left motor left
+    public int cuEncoderVal; //encoder values for leftLift
     public int olEncoderVal;
+
+    public boolean pressed = false;
+    public boolean pushed = false;
+
+    double position = robot.HOME;
+    final double SPEED = 0.02; //sets rate to move servo
 
     Orientation angles; //to use the imu (mostly for telemetry)
 
@@ -101,16 +107,92 @@ public class Team7593TeleOp extends Team7593OpMode {
         }
 
         if(liftStick > 0) {
+            if (robot.rightLift.getMode() != DcMotor.RunMode.RUN_USING_ENCODER) {
+                robot.rightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            }
+            if(robot.leftLift.getMode() != DcMotor.RunMode.RUN_USING_ENCODER) {
+                robot.leftLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            }
             robot.rightLift.setPower(liftStick);
             robot.leftLift.setPower(liftStick);
+            cEncoderVal = oEncoderVal;
+            cuEncoderVal = olEncoderVal;
         }else if(liftStick < 0) {
+            if (robot.rightLift.getMode() != DcMotor.RunMode.RUN_USING_ENCODER) {
+            robot.rightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
+            if(robot.leftLift.getMode() != DcMotor.RunMode.RUN_USING_ENCODER) {
+                robot.leftLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            }
             robot.rightLift.setPower(liftStick);
             robot.leftLift.setPower(liftStick);
+            cEncoderVal = oEncoderVal;
+            cuEncoderVal = olEncoderVal;
+
         }else{
-            robot.rightLift.setPower(0);
-            robot.leftLift.setPower(0);
+            if (robot.rightLift.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
+            robot.rightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        }
+            if (robot.leftLift.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
+                robot.leftLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            }
+            robot.rightLift.setTargetPosition(oEncoderVal);
+            robot.rightLift.setPower(0.1);
+
+            robot.leftLift.setTargetPosition(oldEncoderVal);
+            robot.leftLift.setPower(0.1);
         }
 
+        if (tiltStick > 0) {
+            if (robot.tilt.getMode() != DcMotor.RunMode.RUN_USING_ENCODER) {
+                robot.tilt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            }
+            robot.tilt.setPower(tiltStick);
+            oldEncoderVal = currEncoderVal;
+        } else if (tiltStick < 0) {
+            if (robot.tilt.getMode() != DcMotor.RunMode.RUN_USING_ENCODER) {
+                robot.tilt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            }
+            robot.tilt.setPower(-tiltStick);
+            oldEncoderVal = currEncoderVal;
+        } else {
+            if (robot.tilt.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
+                robot.tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            }
+            robot.tilt.setTargetPosition(oldEncoderVal);
+            robot.tilt.setPower(0.1);
+        }
+
+        if (gamepad2.x) {
+            if(pressed == false){
+                robot.hook.setPosition(0.8);
+                pressed = true;
+            }else{
+                robot.hook.setPosition(0.0);
+                pressed = false;
+            }
+        }
+
+        if (gamepad2.a) {
+            if (pushed == false){
+                robot.latch.setPosition(0.0);
+                pushed = true;
+
+            }else {
+                robot.latch.setPosition(0.5);
+                pushed = false;
+            }
+        }
+
+        //code to turn servo
+        if(gamepad2.dpad_up){
+            position += SPEED;
+        }else if(gamepad2.dpad_down){
+            position -= SPEED;
+        }
+
+        position = Range.clip(position, robot.MIN, robot.MAX);
+        robot.hook.setPosition(position);
 
 
         //use the imu
