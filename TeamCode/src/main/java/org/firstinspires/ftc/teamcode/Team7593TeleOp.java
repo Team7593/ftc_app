@@ -114,7 +114,7 @@ public class Team7593TeleOp extends Team7593OpMode {
                 robot.leftLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             }
             robot.rightLift.setPower(liftStick);
-            robot.leftLift.setPower(liftStick);
+            robot.leftLift.setPower(-liftStick);
             cEncoderVal = oEncoderVal;
             cuEncoderVal = olEncoderVal;
         }else if(liftStick < 0) {
@@ -125,7 +125,7 @@ public class Team7593TeleOp extends Team7593OpMode {
                 robot.leftLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             }
             robot.rightLift.setPower(liftStick);
-            robot.leftLift.setPower(liftStick);
+            robot.leftLift.setPower(-liftStick);
             cEncoderVal = oEncoderVal;
             cuEncoderVal = olEncoderVal;
 
