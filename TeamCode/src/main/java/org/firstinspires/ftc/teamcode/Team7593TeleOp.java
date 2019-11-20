@@ -49,6 +49,11 @@ public class Team7593TeleOp extends Team7593OpMode {
         super.init();
 
         //stop the motor(s) and reset the motor encoders to 0
+
+        robot.tilt.setPower(0);
+        robot.rightLift.setPower(0);
+        robot.leftLift.setPower(0);
+
         robot.tilt.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.leftLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         robot.rightLift.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -56,6 +61,11 @@ public class Team7593TeleOp extends Team7593OpMode {
         robot.tilt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.leftLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.rightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        //get the starting encoder value of tilt (this is so we don't assume the starting econder value is 0)
+        oldEncoderVal = robot.tilt.getCurrentPosition();
+        oEncoderVal = robot.leftLift.getCurrentPosition();
+        olEncoderVal = robot.rightLift.getCurrentPosition();
 
         telemetry.addData("Say", "HELLO FROM THE OTHER SIIIIIDE");
         time.startTime();
@@ -84,8 +94,8 @@ public class Team7593TeleOp extends Team7593OpMode {
         liftStick = gamepad2.left_stick_y;
         tiltStick = gamepad2.right_stick_y;
         slowTilt = gamepad2.right_bumper;
-        latch = gamepad2.a;
-        hook = gamepad2.x;
+        //latch = gamepad2.a;
+        //hook = gamepad2.x;
 
         tiltPower = .6;
 
@@ -130,16 +140,15 @@ public class Team7593TeleOp extends Team7593OpMode {
             cuEncoderVal = olEncoderVal;
 
         }else{
+            robot.rightLift.setTargetPosition(oEncoderVal);
+            robot.leftLift.setTargetPosition(oldEncoderVal);
             if (robot.rightLift.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
             robot.rightLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        }
+            }
             if (robot.leftLift.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
                 robot.leftLift.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             }
-            robot.rightLift.setTargetPosition(oEncoderVal);
             robot.rightLift.setPower(0.1);
-
-            robot.leftLift.setTargetPosition(oldEncoderVal);
             robot.leftLift.setPower(0.1);
         }
 
@@ -156,33 +165,33 @@ public class Team7593TeleOp extends Team7593OpMode {
             robot.tilt.setPower(-tiltStick);
             oldEncoderVal = currEncoderVal;
         } else {
+            robot.tilt.setTargetPosition(oldEncoderVal);
             if (robot.tilt.getMode() != DcMotor.RunMode.RUN_TO_POSITION) {
                 robot.tilt.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             }
-            robot.tilt.setTargetPosition(oldEncoderVal);
             robot.tilt.setPower(0.1);
         }
 
-        if (gamepad2.x) {
-            if(pressed == false){
-                robot.hook.setPosition(0.8);
-                pressed = true;
-            }else{
-                robot.hook.setPosition(0.0);
-                pressed = false;
-            }
-        }
+        //if (gamepad2.x) {
+            //if(pressed == false){
+                //robot.hook.setPosition(0.8);
+                //pressed = true;
+            //}else{
+                //robot.hook.setPosition(0.0);
+                //pressed = false;
+            //}
+        //}
 
-        if (gamepad2.a) {
-            if (pushed == false){
-                robot.latch.setPosition(0.0);
-                pushed = true;
+        //if (gamepad2.a) {
+            //if (pushed == false){
+                //robot.latch.setPosition(0.0);
+                //pushed = true;
 
-            }else {
-                robot.latch.setPosition(0.5);
-                pushed = false;
-            }
-        }
+            //}else {
+                //robot.latch.setPosition(0.5);
+                //pushed = false;
+            //}
+        //}
 
         //code to turn servo
         if(gamepad2.dpad_up){
