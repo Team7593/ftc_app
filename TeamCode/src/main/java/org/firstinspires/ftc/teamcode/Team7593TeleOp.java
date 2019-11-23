@@ -17,6 +17,10 @@ public class Team7593TeleOp extends Team7593OpMode {
 
     //Declare Variables
     public ElapsedTime time = new ElapsedTime(); //a timer
+    public double lastReadTimer = 0;
+
+    public ElapsedTime t = new ElapsedTime(); //a timer
+    public double lastReadT = 0;
 
     public int currEncoderVal;  //encoder values for tilt
     public int oldEncoderVal;
@@ -50,7 +54,7 @@ public class Team7593TeleOp extends Team7593OpMode {
 
         //stop the motor(s) and reset the motor encoders to 0
 
-        robot.tilt.setPower(0);
+        /*robot.tilt.setPower(0);
         robot.rightLift.setPower(0);
         robot.leftLift.setPower(0);
 
@@ -65,7 +69,7 @@ public class Team7593TeleOp extends Team7593OpMode {
         //get the starting encoder value of tilt (this is so we don't assume the starting econder value is 0)
         oldEncoderVal = robot.tilt.getCurrentPosition();
         oEncoderVal = robot.leftLift.getCurrentPosition();
-        olEncoderVal = robot.rightLift.getCurrentPosition();
+        olEncoderVal = robot.rightLift.getCurrentPosition();*/
 
         telemetry.addData("Say", "HELLO FROM THE OTHER SIIIIIDE");
         time.startTime();
@@ -77,9 +81,9 @@ public class Team7593TeleOp extends Team7593OpMode {
         super.loop();
 
         //get the current encoder value of tilt
-        cuEncoderVal = robot.leftLift.getCurrentPosition();
+        /*cuEncoderVal = robot.leftLift.getCurrentPosition();
         cEncoderVal = robot.rightLift.getCurrentPosition();
-        currEncoderVal = robot.tilt.getCurrentPosition();
+        currEncoderVal = robot.tilt.getCurrentPosition();*/
 
         double leftX, rightX, leftY, liftStick, tiltStick, tiltPower; //declaration for the game sticks + power
         boolean hook, latch, slowDrive, slowTilt, slowDrive2; //declaration for the buttons/bumpers
@@ -94,8 +98,8 @@ public class Team7593TeleOp extends Team7593OpMode {
         liftStick = gamepad2.left_stick_y;
         tiltStick = gamepad2.right_stick_y;
         slowTilt = gamepad2.right_bumper;
-        //latch = gamepad2.a;
-        //hook = gamepad2.x;
+        latch = gamepad2.a;
+        hook = gamepad2.x;
 
         tiltPower = .6;
 
@@ -116,7 +120,7 @@ public class Team7593TeleOp extends Team7593OpMode {
             tiltPower = tiltPower/2;
         }
 
-        if(liftStick > 0) {
+        /*if(liftStick > 0) {
             if (robot.rightLift.getMode() != DcMotor.RunMode.RUN_USING_ENCODER) {
                 robot.rightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             }
@@ -162,7 +166,7 @@ public class Team7593TeleOp extends Team7593OpMode {
             if (robot.tilt.getMode() != DcMotor.RunMode.RUN_USING_ENCODER) {
                 robot.tilt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             }
-            robot.tilt.setPower(-tiltStick);
+            robot.tilt.setPower(tiltStick);
             oldEncoderVal = currEncoderVal;
         } else {
             robot.tilt.setTargetPosition(oldEncoderVal);
@@ -171,37 +175,38 @@ public class Team7593TeleOp extends Team7593OpMode {
             }
             robot.tilt.setPower(0.1);
         }
+         */
 
-        //if (gamepad2.x) {
-            //if(pressed == false){
-                //robot.hook.setPosition(0.8);
-                //pressed = true;
-            //}else{
-                //robot.hook.setPosition(0.0);
-                //pressed = false;
-            //}
-        //}
+        if (gamepad2.x && time.time() > lastReadT + 0.5) {
+            lastReadT = time.time();
+            pressed = !pressed;
+            if(pressed == false){
+                robot.hook.setPosition(.4);
+            }else{
+                robot.hook.setPosition(1);
+            }
+        }
 
-        //if (gamepad2.a) {
-            //if (pushed == false){
-                //robot.latch.setPosition(0.0);
-                //pushed = true;
-
-            //}else {
-                //robot.latch.setPosition(0.5);
-                //pushed = false;
-            //}
-        //}
+        /*if (gamepad2.a && time.time() > lastReadTimer + 0.5) {
+            lastReadTimer = time.time();
+            pushed = !pushed;
+            if (pushed == false){
+                robot.latch.setPosition(1);
+            }else{
+                robot.latch.setPosition(0.6);
+            }
+        }*/
 
         //code to turn servo
         if(gamepad2.dpad_up){
             position += SPEED;
+            position = Range.clip(position, robot.MIN, robot.MAX);
+            robot.hook.setPosition(position);
         }else if(gamepad2.dpad_down){
             position -= SPEED;
+            position = Range.clip(position, robot.MIN, robot.MAX);
+            robot.hook.setPosition(position);
         }
-
-        position = Range.clip(position, robot.MIN, robot.MAX);
-        robot.hook.setPosition(position);
 
 
         //use the imu

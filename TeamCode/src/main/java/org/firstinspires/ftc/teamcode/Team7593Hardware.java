@@ -25,19 +25,19 @@ public class Team7593Hardware {
     public DcMotor motorFrontLeft;
     public DcMotor motorRearRight;
     public DcMotor motorRearLeft;
-    public DcMotor rightLift;
-    public DcMotor leftLift;
-    public DcMotor tilt;
+    //public DcMotor rightLift;
+    //public DcMotor leftLift;
+    //public DcMotor tilt;
 
 
     //declare servos
-    public Servo latch;
+    //public Servo latch;
     public Servo hook;
 
     //the way i made the code work is there's range that the servo can move
     //when a driver presses the dpad up or down the servo moves back or forth in this range
     //change the range HERE ONLY that's all you'll need if the range is off
-    public final static double HOME = 0.0; //starting position for servo tilt
+    public final static double HOME = 1.0; //starting position for servo tilt
     //                                       ^change this value
     public final static double MIN = 0.0; //min value for servo tilt
     //                                      ^change this value
@@ -80,12 +80,12 @@ public class Team7593Hardware {
         motorFrontLeft = hwMap.get(DcMotor.class, "mfl");
         motorRearRight = hwMap.get(DcMotor.class, "mrr");
         motorRearLeft = hwMap.get(DcMotor.class, "mrl");
-        rightLift = hwMap.get(DcMotor.class, "rlift");
-        leftLift = hwMap.get(DcMotor.class, "llift");
-        tilt = hwMap.get(DcMotor.class, "tilt");
+        //rightLift = hwMap.get(DcMotor.class, "rlift");
+        //leftLift = hwMap.get(DcMotor.class, "llift");
+        //tilt = hwMap.get(DcMotor.class, "tilt");
 
         //Define and initialize servos
-        latch = hwMap.get(Servo.class, "latch");
+        //latch = hwMap.get(Servo.class, "latch");
         hook = hwMap.get(Servo.class, "hook");
 
         //Define and initialize sensors
@@ -101,9 +101,9 @@ public class Team7593Hardware {
         motorFrontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorRearRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         motorRearLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        rightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        leftLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        tilt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //rightLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //leftLift.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //tilt.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     //powers the wheels
