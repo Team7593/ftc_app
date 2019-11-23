@@ -73,6 +73,7 @@ public class Team7593TeleOp extends Team7593OpMode {
 
         telemetry.addData("Say", "HELLO FROM THE OTHER SIIIIIDE");
         time.startTime();
+        t.startTime();
     }
 
     public void loop() {
@@ -177,8 +178,8 @@ public class Team7593TeleOp extends Team7593OpMode {
         }
          */
 
-        if (gamepad2.x && time.time() > lastReadT + 0.5) {
-            lastReadT = time.time();
+        if (gamepad2.x && t.time() > lastReadT + 0.5) {
+            lastReadT = t.time();
             pressed = !pressed;
             if(pressed == false){
                 robot.hook.setPosition(.4);
